@@ -62,7 +62,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "chart:build"
+            "browserTarget": "chart:build",
+            
           },
           "configurations": {
             "production": {
@@ -119,6 +120,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "chart"
+    }
+  },
+  "defaultProject": "chart",
+  "cli": {
+    "analytics": "b09b16da-dc78-486e-97aa-95b46d2cb1d9"
+  }
 }
