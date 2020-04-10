@@ -7,6 +7,7 @@ import { BarchartComponent } from './barchart/barchart.component';
 
 
 const routes: Routes = [
+  {path:'',   component : MyBarChartComponent},
   {path:'bar-chart',   component : BarchartComponent},
   {path : 'my-bar-chart', component : MyBarChartComponent},
   {path:'radar-chart', component:RadarChartComponent},

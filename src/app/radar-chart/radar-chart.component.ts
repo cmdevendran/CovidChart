@@ -16,6 +16,7 @@ export class RadarChartComponent implements OnInit {
   data : any;
   Date : any;
   death : any;
+  loading : any;
   //serData : any;
   public lineChartPlugins = [pluginAnnotations];
   
@@ -23,6 +24,7 @@ export class RadarChartComponent implements OnInit {
   //array = JSON.parse(this.serData);
   array2 : any;
   show : boolean = false
+ 
   
   barChartOptions : ChartOptions;
   barChartLabels : Label[]
@@ -39,6 +41,7 @@ export class RadarChartComponent implements OnInit {
   constructor(private covid : CovidService) { }
 
   ngOnInit(): void {
+    this.showImage()
 
     this.covid.getKeyCountries().subscribe(res=>{
 
@@ -87,6 +90,8 @@ export class RadarChartComponent implements OnInit {
         {data: array.map(e => e["Spain"]), label: 'Spain'},
         {data: array.map(e => e["United_Kingdom"]), label: 'UK'}
 
+       
+
 
 
 
@@ -96,7 +101,7 @@ export class RadarChartComponent implements OnInit {
 
 
 
- 
+     this.hideImage()
 
       
 
@@ -117,5 +122,16 @@ export class RadarChartComponent implements OnInit {
 
 
 }
+
+ showImage(){
+  document.getElementById("loading").style.visibility = "visible"; 
+ }
+
+ hideImage()
+ {
+  document.getElementById("loading").style.display = "none"; 
+  document.getElementById("loading").style.visibility = "hidden"; 
+
+ }
 
 }

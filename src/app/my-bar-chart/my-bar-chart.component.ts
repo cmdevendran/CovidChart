@@ -40,6 +40,7 @@ legend : any
    
 
   ngOnInit(): void {
+    this.showImage()
 
     this.covid.getWorldAggregate().subscribe(res=>{
 
@@ -107,6 +108,8 @@ legend : any
         
       ];
 
+      this.hideImage()
+
       this.legend = true;
 
 
@@ -131,6 +134,18 @@ legend : any
 
 
 }
+
+
+showImage(){
+  document.getElementById("loading").style.visibility = "visible"; 
+ }
+
+ hideImage()
+ {
+  document.getElementById("loading").style.display = "none"; 
+  document.getElementById("loading").style.visibility = "hidden"; 
+
+ }
 
 
 }
