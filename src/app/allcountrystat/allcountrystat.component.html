@@ -5,7 +5,7 @@
 
 
 
-  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="registrationForm">
 
     <select class="custom-select" (change)="changeCity($event)" formControlName="country">
       <option value="" disabled>Choose your Country</option>
