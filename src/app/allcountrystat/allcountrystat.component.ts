@@ -3,14 +3,18 @@ import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label, Color} from 'ng2-charts';
 import { JsonPipe } from '@angular/common';
 import {CovidService} from '../covid.service'
+import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/forms";
+
 
 @Component({
-  selector: 'app-my-bar-chart',
-  templateUrl: './my-bar-chart.component.html',
-  styleUrls: ['./my-bar-chart.component.css']
+  selector: 'app-allcountrystat',
+  templateUrl: './allcountrystat.component.html',
+  styleUrls: ['./allcountrystat.component.css']
 })
-export class MyBarChartComponent implements OnInit {
-data : any;
+export class AllcountrystatComponent implements OnInit {
+countries : any
+country : AbstractControl
+  data : any;
 Date : any;
 death : any;
 //serData : any;
@@ -30,117 +34,72 @@ barChartColors1: Color[]
 barChartData1: ChartDataSets[]
 barChartColors2: Color[] 
 barChartData2: ChartDataSets[]
+registrationForm : FormGroup
+  
+constructor(private covid : CovidService,public fb: FormBuilder) {
+  
+  this.registrationForm = this.fb.group({
+    'country': ['']
+  })
+  this.country = this.registrationForm.controls['country'];
+}
 
-legend : any
+changeCity(e) {
+ let value1= this.registrationForm.controls['country'].value
+ console.log("vaj "+value1)
+ //alert("country " +value1)
+ this.ngOnInit()
+
+}
   
-  constructor(private covid : CovidService) {
+
+
+
+ngOnInit(): void {
+
+
+  this.covid.getAllCountries().subscribe(res=>{
+
+   console.log(JSON.parse(JSON.stringify(res)))
+   let barray = JSON.parse(JSON.stringify(res))
+
+   //console.log("countries : "+array.map(e => e["Country"]))
+   let array = barray.filter(a=>a.Country==this.registrationForm.controls['country'].value);
+   this.countries =  Array.from(new Set(barray.map(e => e["Country"])));
+   console.log("countries : "+JSON.stringify(array))
+
+   
+   
+
+
+   this.showImage()
+   this.drawBarChart(array)
+   this.hideImage()
+
+   //this.scatterChart(array)
+
   
-   }
+  
+
+
+
+
+
+
 
    
 
-  ngOnInit(): void {
-    this.showImage()
+   })
 
-    this.covid.getWorldAggregate().subscribe(res=>{
+  
 
-      console.log(JSON.parse(JSON.stringify(res)))
-      let array = JSON.parse(JSON.stringify(res))
+   
 
-      
-      
-
-      
-      this.barChartOptions = {
-        responsive: true,
-        // We use these empty structures as placeholders for dynamic theming.
-        scales: { xAxes: [{}], yAxes: [{}] },
-        plugins: {
-          datalabels: {
-            anchor: 'end',
-            align: 'end',
-          }
-        }
-      };
-
-      this.barChartLabels =array.map(e => e["Date"])
-      this.barChartType = 'line';
-      this.barChartLegend = true;
-
-      this.barChartColors = [
-        { // red
-          backgroundColor: 'red',
-          borderColor: 'red',
-          pointBackgroundColor: 'red',
-          pointBorderColor: 'red',
-          pointHoverBackgroundColor: 'red',
-          pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-        },
-        {backgroundColor: 'yellow',
-        borderColor: 'yellow',
-        pointBackgroundColor: 'yellow',
-        pointBorderColor: 'yellow',
-        pointHoverBackgroundColor: 'yellow',
-        pointHoverBorderColor: 'rgba(148,159,177,0.8)' },
-        { backgroundColor: 'green' },
-      ]
-
-      this.barChartData = [
-
-        { data: array.map(e => e["Deaths"]), label: 'Death', },
-        {data: array.map(e => e["Confirmed"]), label: 'Confirmed'} ,
-        {data: array.map(e => e["Recovered"]), label: 'Recovered'}
-      
-    
-      ];
-
-      this.barChartColors1=[
-        {
-          backgroundColor: 'yellow' 
-        },
-      ];
-
-      this.barChartData1 = [
-
-    
-        { data: array.map(e => e["Confirmed"]), label: 'Confirmed' },
-        
-      ];
-
-
-      this.barChartColors2=[
-        {
-          backgroundColor: 'red',
-        },
-      ];
-
-      this.barChartData2 = [
-
-    
-        { data: array.map(e => e["Deaths"]), label: 'Deaths' },
-        
-      ];
-
-      this.hideImage()
-
-      this.legend = true;
 
 
  
 
-      
-
-      })
-
-     
-
-      
-
  
-
-    
-
-    
 
 
 
@@ -148,17 +107,139 @@ legend : any
 
 }
 
+drawBarChart(array){
+
+  this.showImage()
+
+   
+  this.barChartOptions = {
+    responsive: true,
+    // We use these empty structures as placeholders for dynamic theming.
+    scales: { xAxes: [{}], yAxes: [{}] },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+
+  this.barChartLabels =array.map(e => e["Date"])
+//  this.barChartType = 'horizontalBar';
+this.barChartType = 'bar';
+  this.barChartLegend = true;
+
+  this.barChartColors = [
+    { // red
+      backgroundColor: 'red',
+      borderColor: 'red',
+      pointBackgroundColor: 'red',
+      pointBorderColor: 'red',
+      pointHoverBackgroundColor: 'red',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    },
+    {backgroundColor: 'yellow',
+    borderColor: 'yellow',
+    pointBackgroundColor: 'yellow',
+    pointBorderColor: 'yellow',
+    pointHoverBackgroundColor: 'yellow',
+    pointHoverBorderColor: 'rgba(148,159,177,0.8)' },
+    { backgroundColor: 'green' },
+  ]
+
+  this.barChartData = [
+
+    { data: array.map(e => e["Deaths"]), label: 'Death', },
+    {data: array.map(e => e["Confirmed"]), label: 'Confirmed'} ,
+    {data: array.map(e => e["Recovered"]), label: 'Recovered'}
+  
+
+  ];
+
+  this.barChartColors1=[
+    {
+      backgroundColor: 'yellow' 
+    },
+  ];
+
+  this.barChartData1 = [
+
+
+    { data: array.map(e => e["Confirmed"]), label: 'Confirmed' },
+    
+  ];
+
+
+  this.barChartColors2=[
+    {
+      backgroundColor: 'red',
+    },
+  ];
+
+  this.barChartData2 = [
+
+
+    { data: array.map(e => e["Deaths"]), label: 'Deaths' },
+    
+  ];
+  this.hideImage()
+}
+
+onchange(value){
+  alert(JSON.stringify(value))
+}
+
+scatterChartOptions: ChartOptions
+scatterChartLabels: Label[]
+scatterChartData: ChartDataSets[]
+scatterChartType: ChartType 
+
+scatterChart(value){
+  this.scatterChartOptions = {
+    responsive: true,
+  };
+  this.scatterChartLabels = ['Confirmed','Deaths','Recovered' ];
+
+  this.scatterChartData = [
+    {
+      data: [
+        { x: 1, y: 1 },
+        { x: 2, y: 3 },
+        { x: 3, y: -2 },
+        { x: 4, y: 4 },
+        { x: 5, y: -3 },
+      ],
+      label: 'Series A',
+      pointRadius: 10,
+    },
+  ];
+  this.scatterChartType = 'scatter';
+}
+
+
+
+
+selectedCountry(){
+  let showSelectValue = function(mySelect) {
+    console.log(mySelect);
+}
+
+ /*   this.country = document.getElementById("country");
+   var result = this.country.options[this.country.selectedIndex].value;
+	alert(result);
+   console.log("county : "+this.country) */
+}
 
 showImage(){
-  document.getElementById("loading").style.visibility = "visible"; 
- }
+document.getElementById("loading").style.visibility = "visible"; 
+}
 
- hideImage()
- {
-  document.getElementById("loading").style.display = "none"; 
-  document.getElementById("loading").style.visibility = "hidden"; 
+hideImage()
+{
+document.getElementById("loading").style.display = "none"; 
+document.getElementById("loading").style.visibility = "hidden"; 
 
- }
+}
 
 
 }

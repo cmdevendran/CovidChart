@@ -12,7 +12,8 @@ import { PieChartComponent } from './pie-chart/pie-chart.component'
 import { HttpClientModule } from "@angular/common/http";
 import { BarchartComponent } from './barchart/barchart.component';
 import * as pluginAnnotations from 'chartjs-plugin-annotation';
-
+import { AllcountrystatComponent } from './allcountrystat/allcountrystat.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,13 +22,15 @@ import * as pluginAnnotations from 'chartjs-plugin-annotation';
     MyBarChartComponent,
     RadarChartComponent,
     PieChartComponent,
-    BarchartComponent
+    BarchartComponent,
+    AllcountrystatComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ChartsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [CovidService],
   bootstrap: [AppComponent]

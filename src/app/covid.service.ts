@@ -27,6 +27,14 @@ export class CovidService {
 
 
   }
+  getAllCountries(){
+    const url = "https://datahub.io/core/covid-19/r/countries-aggregated.json"
+    return this.http.get(url).pipe(map(data =>data))
+
+
+
+  }
+
 
 
  

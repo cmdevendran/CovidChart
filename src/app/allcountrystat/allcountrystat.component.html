@@ -1,0 +1,38 @@
+<div id="loading" height=50px width=100px style="position:relative; text-align:center;">  
+    <img src="https://media.giphy.com/media/y1ZBcOGOOtlpC/giphy.gif" alt="Processing" />
+  </div>
+
+
+
+
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+
+    <select class="custom-select" (change)="changeCity($event)" formControlName="country">
+      <option value="" disabled>Choose your Country</option>
+      <option *ngFor="let country of countries" [ngValue]="country">{{country}}</option>
+   </select>
+  
+</form>
+
+
+
+  
+    <div style="display: block" >
+      <canvas baseChart  
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [colors]="barChartColors"     
+        [legend]="barChartLegend"
+        [chartType]="barChartType">
+      </canvas>
+    </div>
+
+    <div style="display: block">
+      <canvas baseChart
+        [datasets]="scatterChartData"
+        [options]="scatterChartOptions"
+        [labels]="scatterChartLabels"
+        [chartType]="scatterChartType">
+      </canvas>
+    </div>
